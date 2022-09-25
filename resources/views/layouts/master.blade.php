@@ -103,6 +103,21 @@
                 @endif
             </div>
 
+
+            <a href="#salaries" class=" list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i
+                        class="fa fa-money sidebar-icon"></i><span id="menu-txt">{{ __('Salaries') }}</span>
+                <i class="icon ion-md-arrow-dropup arrow-side sidebar-arrow"></i></a>
+            <div class="collapse" id="salaries">
+            <a href="{{ route('salaries.index')}}" class="list-group-item childlist"> <i
+                            class="bullet-point"><span></span></i> {{ __('All Salaries') }}</a>
+                @if(Entrust::can('lead-create'))
+                    <a href="{{ route('salaries.create')}}"
+                       class="list-group-item childlist"> <i class="bullet-point"><span></span></i> {{ __('New Salaries') }}
+                    </a>
+                @endif
+            </div>
+
+
             <a href="#leads" class=" list-group-item" data-toggle="collapse" data-parent="#MainMenu"><i
                         class="fa fa-hourglass-2 sidebar-icon"></i><span id="menu-txt">{{ __('Leads') }}</span>
                 <i class="icon ion-md-arrow-dropup arrow-side sidebar-arrow"></i></a>

@@ -227,6 +227,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/', 'AbsenceController@store')->name('absence.store');
         Route::delete('/{absence}', 'AbsenceController@destroy')->name('absence.destroy');
     });
+
+    /**
+     * Salary
+     */
+    Route::group(['prefix' => 'salaries'], function () {
+        Route::get('/data', 'SalariesController@indexData')->name('salaries.data');
+        Route::get('/', 'SalariesController@index')->name('salaries.index');
+        Route::get('/create', 'SalariesController@create')->name('salaries.create');
+        Route::post('/', 'SalariesController@store')->name('salaries.store');
+        Route::delete('/{salary}', 'SalariesController@destroy')->name('salaries.destroy');
+    });
+
 });
 
 Route::group(['middleware' => ['auth']], function () {
