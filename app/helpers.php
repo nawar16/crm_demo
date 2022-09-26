@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\Activity\ActivityLogger;
+use Carbon\Carbon;
 
 if (! function_exists('activity')) {
     function activity(string $logName = null): ActivityLogger
@@ -62,5 +63,27 @@ if (! function_exists('formatMoney')) {
     function formatMoney($amount, $useCode = false): String
     {
         return app(\App\Repositories\Money\MoneyConverter::class, ['money' => $amount])->format($useCode);
+    }
+}
+if (! function_exists('defaultDateRange')) {
+    function defaultDateRange()
+    {
+        return implode(' to ', [now()->subDays(30)->format('F d, Y'), now()->format('F d, Y')]);
+    }
+}
+
+
+if (! function_exists('dateRangeTextToArray')) {
+    function dateRangeTextToArray($range = false)
+    {
+        if (! $range) {
+            $range = defaultDateRange();
+        }
+
+        [$from, $to] = explode(' to ', $range);
+        $from = Carbon::parse(trim($from))->startOfDay();
+        $to = Carbon::parse(trim($to))->endOfDay();
+
+        return [$from, $to];
     }
 }

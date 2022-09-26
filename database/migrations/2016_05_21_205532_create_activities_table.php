@@ -20,7 +20,7 @@ class CreateActivitiesTable extends Migration
             $table->string('source_type');
             $table->unsignedBigInteger('source_id')->nullable();
             $table->string('ip_address', 64);
-            $table->json('properties')->nullable();
+            $table->longText('properties')->nullable();
             $table->timestamps();
         });
     }
