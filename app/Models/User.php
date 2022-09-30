@@ -62,7 +62,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'user_assigned_id', 'id');
     }
-
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class, 'user_id', 'id');
+    }
     public function leads()
     {
         return $this->hasMany(Lead::class, 'user_assigned_id', 'id');

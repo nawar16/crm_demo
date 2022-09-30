@@ -30,8 +30,10 @@ class AbsenceControllerTest extends TestCase
         ]);
 
         $absences = $user->absences;
+        $salary_leave_days = $user->salary->leave_days;
         $this->assertNotNull(\Session::all()["flash_message"]);
         $this->assertCount(1, $absences);
+        $this->assertCount(1, $salary_leave_days);
     }
 
     /** @test **/

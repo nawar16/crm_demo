@@ -15,6 +15,8 @@ use Yajra\DataTables\DataTables;
 
 class AbsenceController extends Controller
 {
+    const CREATED = 'created';
+    
     public function indexData()
     {
         if (!auth()->user()->can('absence-view')) {
@@ -81,7 +83,7 @@ class AbsenceController extends Controller
             $medical_certificate = false;
         }
 
-        Absence::create([
+        $absence = Absence::create([
             'external_id' => Uuid::uuid4()->toString(),
             'reason' => $request->reason,
             'user_id' => $user->id,
@@ -92,6 +94,7 @@ class AbsenceController extends Controller
         ]);
 
         Session::flash('flash_message', __('Absence registered'));
+        event(new \App\Events\AbsenceAction($absence, self::CREATED));
         return redirect()->back();
     }
 
