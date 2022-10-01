@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\AbsenceReason;
-use App\Models\Absence;
+use App\Models\Salary;
 use App\Models\Client;
 use App\Models\User;
 
@@ -18,7 +17,7 @@ class SalariesController extends Controller
 
     public function index()
     {
-        if (!auth()->user()->can('absence-view')) {
+        if (!auth()->user()->can('salary-view')) {
             session()->flash('flash_message_warning', __('You do not have permission to view this page'));
             return redirect()->back();
         }
@@ -29,11 +28,10 @@ class SalariesController extends Controller
     public function create()
     {
         $users = null;
-        if (request()->management === "true" && auth()->user()->can('absence-manage')) {
+        if (auth()->user()->can('salary-manage')) {
             $users = User::with(['department'])->get()->pluck('nameAndDepartmentEagerLoading', 'external_id');
         }
-        return view('absence.create')
-            ->withReasons(AbsenceReason::values())
+        return view('salaries.create')
             ->withUsers($users);
     }
 
@@ -41,7 +39,7 @@ class SalariesController extends Controller
     {
         $medical_certificate = null;
         $user = auth()->user();
-        if ($request->user_external_id && auth()->user()->can('absence-manage')) {
+        if ($request->user_external_id && auth()->user()->can('salary-manage')) {
             $user = User::whereExternalId($request->user_external_id)->first();
             if (!$user) {
                 Session::flash('flash_message_warning', __('Could not find user'));
@@ -54,7 +52,7 @@ class SalariesController extends Controller
             $medical_certificate = false;
         }
 
-        Absence::create([
+        Salary::create([
             'external_id' => Uuid::uuid4()->toString(),
             'reason' => $request->reason,
             'user_id' => $user->id,
@@ -64,17 +62,17 @@ class SalariesController extends Controller
             'comment' => clean($request->comment),
         ]);
 
-        Session::flash('flash_message', __('Absence registered'));
+        Session::flash('flash_message', __('Salary registered'));
         return redirect()->back();
     }
 
-    public function destroy(Absence $absence)
+    public function destroy(Salary $salary)
     {
-        if (!auth()->user()->can('absence-manage')) {
+        if (!auth()->user()->can('salary-manage')) {
             Session::flash('flash_message_warning', __('You do not have sufficient privileges for this action'));
             return redirect()->back();
         }
-        $absence->delete();
+        $salary->delete();
 
         return response("OK");
     }

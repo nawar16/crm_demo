@@ -1,13 +1,13 @@
 @extends('layouts.master')
 @section('content')
 
-        <form action="{{route('absence.store')}}" method="POST">
+        <form action="{{route('salaries.store')}}" method="POST">
             <div class="tablet">
                 <div class="tablet__body">
                     <div class="row">
                         @if($users)
                             <div class="col-lg-4">
-                                @lang("For which user are you registering absence?")
+                                @lang("For which user are you adding salary?")
                             </div>
                             <div class="col-lg-8">
                                 <select name="user_external_id"
@@ -25,65 +25,15 @@
                                 </select>
                             </div>
                             <hr style="margin-top:4em;">
-                        @endif
-                        <div class="col-lg-4">
-                            @lang("What's the reason for the absence?")
-                        </div>
-                        <div class="col-lg-8">
-                            <select name="reason" id="reason" class="form-control">
-                                @foreach($reasons as $reason)
-                                <option value="{{$reason->getReason()}}">{{__($reason->getDisplayValue())}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <hr style="margin-top:5em;">
-
-                        <div class="col-lg-4">
-                            @lang('When does the absence start?')
-                        </div>
-                        <div class="col-lg-8">
-                            <input type="text" name="start_date" id="start_date" class="form-control" data-value="{{today()->format(carbonDate())}}" >
-                        </div>
-                        <hr style="margin-top:5em;">
-
-                        <div class="col-lg-4">
-                            @lang('How long will the absence be for?')
-                        </div>
-                        <div class="col-lg-8">
-                            <input type="text" name="end_date" id="end_date" class="form-control" data-value="{{today()->format(carbonDate())}}" >
-                        </div>
-                        <hr style="margin-top:5em;">
-                        <div id="medical-certificate">
                             <div class="col-lg-4">
-                                @lang('Do you have a medical certificate?')
+                                @lang("Salary value")
                             </div>
                             <div class="col-lg-8">
-                                <div class="col-lg-4" style="padding-left: 0px;">
-                                    <div class="checkboxInputGroup">
-                                        <input id="radio1" name="radio" type="radio" value="true"/>
-                                        <label for="radio1">@lang('Yes')</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="checkboxInputGroup">
-                                        <input id="radio2" name="radio" type="radio" value="false"/>
-                                        <label for="radio2">@lang('No')</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="checkboxInputGroup">
-                                        <input id="radio3" name="radio" type="radio" value="irrelevant" checked/>
-                                        <label for="radio3">@lang('Irrelevant')</label>
-                                    </div>
-                                </div>
-
+                            <input type="number" name="salary" id="salary" class="form-control">
                             </div>
-                            <hr style="margin-top:5em;">
-                        </div>
-                        <div class="col-lg-12">
-                            @lang('Additional comments')
-                            <textarea name="comment" class="form-control movedown" id="comment" cols="30" rows="10"></textarea>
-                        </div>
+
+                            
+                        @endif
                     </div>
                 </div>
                 <div class="tablet__footer">

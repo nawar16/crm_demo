@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Permission;
 
 class CreateSalariesTable extends Migration
 {
@@ -39,7 +40,32 @@ class CreateSalariesTable extends Migration
             $table->integer('over_time_count')->nullable();
             $table->integer('over_time')->nullable();
             $table->timestamps();
+
         });
+
+
+                /** Create new permissions */
+                $acpp = Permission::create([
+                    'display_name' => 'Manage salaries',
+                    'name' => 'salary-manage',
+                    'description' => 'Be able to manage salaries for all users',
+                    'grouping' => 'hr',
+                ]);
+        
+                /** Create new permissions */
+                $vcpp = Permission::create([
+                    'display_name' => 'View salaries',
+                    'name' => 'salary-view',
+                    'description' => 'Be able to view salaries for all users and see who is absent today on the dashboard',
+                    'grouping' => 'hr',
+                ]);
+        
+                $roles = \App\Models\Role::whereIn('name', ['owner', 'administrator'])->get();
+        
+                foreach ($roles as $role) {
+                    $role->permissions()->attach([$acpp->id, $vcpp->id]);
+                }
+                
     }
 
     /**

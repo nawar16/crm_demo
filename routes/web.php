@@ -9,6 +9,8 @@
 | to using a Closure or controller method. Build something great!
 |
 */
+use App\Models\Permission; 
+
 Route::auth();
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => ['auth']], function () {
@@ -245,3 +247,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dropbox-token', 'CallbackController@dropbox')->name('dropbox.callback');
     Route::get('/googledrive-token', 'CallbackController@googleDrive')->name('googleDrive.callback');
 });
+
+
+
