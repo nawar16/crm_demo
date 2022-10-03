@@ -55,17 +55,18 @@ class User extends Authenticatable
      */
     protected $hidden = ['id', 'password', 'password_confirmation', 'remember_token', 'image_path'];
     protected $appends = ['avatar'];
-
     protected $primaryKey = 'id';
 
     public function tasks()
     {
         return $this->hasMany(Task::class, 'user_assigned_id', 'id');
     }
+
     public function salaries()
     {
         return $this->hasMany(Salary::class, 'user_id', 'id');
     }
+
     public function leads()
     {
         return $this->hasMany(Lead::class, 'user_assigned_id', 'id');
@@ -115,7 +116,6 @@ class User extends Authenticatable
         return $this->roles->first()->name == Role::OWNER_ROLE || $this->roles->first()->name == Role::ADMIN_ROLE;
     }
 
-
     public function isOnline()
     {
         return Cache::has('user-is-online-' . $this->id);
@@ -127,13 +127,17 @@ class User extends Authenticatable
         return $this->name . ' ' . '(' . $this->department()->first()->name . ')';
     }
 
-
     public function getNameAndDepartmentEagerLoadingAttribute()
     {
         //dd($this->name, $this->department()->toSql(), $this->department()->getBindings());
         return $this->name . ' ' . '(' . $this->relations['department'][0]->name . ')';
     }
 
+    public function salary($month)
+    {
+        return $this->salaries->where('month', $month);
+    }
+    
     public function moveTasks($user_id)
     {
         $tasks = $this->tasks()->get();

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use App\Observers\AbsenceObserver;
 
 class Absence extends Model
 {
@@ -21,6 +22,13 @@ class Absence extends Model
 
     protected $hidden = ['id', 'user_id'];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::observe(AbsenceObserver::class);
+        
+    }
     public function getRouteKeyName()
     {
         return 'external_id';

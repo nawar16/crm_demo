@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Observers;
+use App\Models\Absence;
 
 class AbsenceObserver
 {
@@ -20,8 +21,8 @@ class AbsenceObserver
      */
     public function created(Absence $absence)
     {
-        $absence->user->salary->increment('leave_days');
-        dd($absence->user->salary);
+        $absence->user->salary($absence->start_at->format('m'))->first() ? 
+        $absence->user->salary($absence->start_at->format('m'))->first()->increment('leave_days') : '';
     }
 
     /**

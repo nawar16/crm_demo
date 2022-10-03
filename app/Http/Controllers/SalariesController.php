@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Salary;
 use App\Models\Client;
 use App\Models\User;
+use App\Http\Requests\Salary\StoreSalayRequest;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,9 +36,8 @@ class SalariesController extends Controller
             ->withUsers($users);
     }
 
-    public function store(Request $request)
+    public function store(StoreSalayRequest $request)
     {
-        $medical_certificate = null;
         $user = auth()->user();
         if ($request->user_external_id && auth()->user()->can('salary-manage')) {
             $user = User::whereExternalId($request->user_external_id)->first();
@@ -45,21 +45,17 @@ class SalariesController extends Controller
                 Session::flash('flash_message_warning', __('Could not find user'));
                 return redirect()->back();
             }
-        }
-        if ($request->medical_certificate == true) {
-            $medical_certificate = true;
-        } elseif ($request->medical_certificate == false) {
-            $medical_certificate = false;
+            if(!is_null($user->salary($request->month)->first()))
+            {
+                Session::flash('flash_message_warning', __('Salary for this month and user already assigned'));
+                return redirect()->back();
+            }
         }
 
         Salary::create([
-            'external_id' => Uuid::uuid4()->toString(),
-            'reason' => $request->reason,
             'user_id' => $user->id,
-            'start_at' => Carbon::parse($request->start_date)->startOfDay(),
-            'end_at' => Carbon::parse($request->end_date)->endOfDay(),
-            'medical_certificate' => $medical_certificate,
-            'comment' => clean($request->comment),
+            'month'   => $request->month,
+            'basic_salary' => $request->salary
         ]);
 
         Session::flash('flash_message', __('Salary registered'));
