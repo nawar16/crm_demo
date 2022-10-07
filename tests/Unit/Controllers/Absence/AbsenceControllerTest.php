@@ -27,8 +27,8 @@ class AbsenceControllerTest extends TestCase
             'salary' => 5000,
             'month' => 1
         ]);
-        //dd(count($user->salaries));
-        //$this->assertCount(1, (int)count($user->salaries));
+        $this->assertCount(1, $user->salaries);
+
         $response = $this->json('POST', route('absence.store'), [
             'reason' => 'Sick',
             'user_external_id' => $user->external_id,
@@ -37,15 +37,11 @@ class AbsenceControllerTest extends TestCase
             'medical_certificate' => null,
             'comment' => 'Sick kid'
         ]);
-
-
         $absences = $user->absences;
         
         $salary_leave_days = $user->salary(1)->first()->leave_days;
-  
         $this->assertNotNull(\Session::all()["flash_message"]);
         $this->assertCount(1, $absences);
-        //$this->assertCount(0, $salary_leave_days);
     }
 
     /** @test **/

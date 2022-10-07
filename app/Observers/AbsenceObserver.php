@@ -21,8 +21,17 @@ class AbsenceObserver
      */
     public function created(Absence $absence)
     {
-        $absence->user->salary($absence->start_at->format('m'))->first() ? 
-        $absence->user->salary($absence->start_at->format('m'))->first()->increment('leave_days') : '';
+        if($absence->user->salary($absence->start_at->format('m'))->first())
+        {
+            $absence->user->salary($absence->start_at->format('m'))->first()->increment('leave_days');
+        }else{
+            $salary = $absence->user->salaries()->create([
+                'user_id' => $absence->user,
+                'month' => $absence->start_at->format('m')
+            ]);
+
+            $salary->increment('leave_days');
+        }
     }
 
     /**
